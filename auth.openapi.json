@@ -1,0 +1,508 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Brainstory Authentication API",
+        "description": "\n<a href=\"/\">👈 Back home</a>\n\n**General error handling information**\n\n| HTTP Status Code | Description                                                                            | Expected way to handle                                                            |\n| ---------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |\n| HTTP 400         | Malformed request                                                                      | See logs to debug                                                                 |\n| HTTP 401         | Could not authenticate (see below)                                                     | Ensure all required inputs are correct, otherwise try logging in again            |\n| HTTP 230         | Authentication at external provider was successful, but an unknown error occurred      | See logs to debug                                                                 |\n| HTTP 231         | User hasn't accepted the terms yet                                                     | Redirect user to terms page, accept terms                                         |\n| HTTP 233         | User e-mail not verified past 2 weeks of creation                                      | Redirect user to e-mail not verified page, prompt them to verify their e-mail     |\n| HTTP 234         | Submitted access token expired                                                         | Try exchange refresh token for a new access token, otherwise try logging in again | \n\nFor 401s, see the notice in the response for specifics - issue could be various things:\n\n- user does not exist on our end;\n- invalid tokens;\n- some sort of hackery;\n- CSRF not set up or set up incorrectly;\n\netc...\n\n",
+        "version": "Release 1"
+    },
+    "servers": [
+        {
+            "url": "/auth-brainstory/v1"
+        }
+    ],
+    "paths": {
+        "/flow/apilogin": {
+            "post": {
+                "tags": [
+                    "User Flow"
+                ],
+                "summary": "Login with a user and API key for an access token",
+                "description": "Login with a user and API key for an access token.",
+                "operationId": "login_with_api_key_flow_apilogin_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/flow/user": {
+            "get": {
+                "tags": [
+                    "User Flow"
+                ],
+                "summary": "[FusionAuth] Begin user flow with",
+                "description": "Begin user flow with FusionAuth. Clients are expected to follow the returned redirect.\n\n*You don't need this call as an end-user.*",
+                "operationId": "flow_user_flow_user_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/flow/oauth-callback": {
+            "get": {
+                "tags": [
+                    "User Flow"
+                ],
+                "summary": "[FusionAuth] OAuth callback",
+                "description": "Do OAuth callback. Redirects back to original client caller.\n\n*You don't need this call as an end-user.*",
+                "operationId": "flow_oauth_callback_flow_oauth_callback_get",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Code"
+                        },
+                        "name": "code",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/flow/exchange": {
+            "get": {
+                "tags": [
+                    "User Flow"
+                ],
+                "summary": "[FusionAuth] Exchange a refresh token for an access token.",
+                "description": "Exchange a refresh token for an updated access token.\n\n*You don't need this call as an end-user.*",
+                "operationId": "flow_exchange_flow_exchange_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoticeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/flow/verified-email-redirect": {
+            "get": {
+                "tags": [
+                    "User Flow"
+                ],
+                "summary": "[FusionAuth] Redirect after e-mail verified",
+                "description": "Redirect after e-mail has been verified.\n\n*You don't need this call as an end-user.*",
+                "operationId": "flow_email_verified_redirect_flow_verified_email_redirect_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/flow/resend-verification": {
+            "get": {
+                "tags": [
+                    "User Flow"
+                ],
+                "summary": "[FusionAuth] Re-send e-mail verification e-mail",
+                "description": "Re-send e-mail verification e-mail.\n\n*You don't need this call as an end-user.*",
+                "operationId": "flow_resend_verification_flow_resend_verification_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoticeResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/flow/logout": {
+            "get": {
+                "tags": [
+                    "User Flow"
+                ],
+                "summary": "[FusionAuth] Logout",
+                "description": "Log out, will remove current session.\n\n*You don't need this call as an end-user.*",
+                "operationId": "flow_logout_flow_logout_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/reset-password": {
+            "post": {
+                "tags": [
+                    "General"
+                ],
+                "summary": "Request a password reset",
+                "description": "Request a password reset.\n\n*You don't need this call as an end-user.*",
+                "operationId": "reset_password_reset_password_post",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoticeResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/regenerate-api-key": {
+            "post": {
+                "tags": [
+                    "General"
+                ],
+                "summary": "Regenerate API key",
+                "description": "Regenerate API key for a user.",
+                "operationId": "regenerate_api_key_regenerate_api_key_post",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiKeyResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/change-full-name": {
+            "post": {
+                "tags": [
+                    "General"
+                ],
+                "summary": "Change user full name",
+                "description": "Change full name of the user.\n\n*You don't need this call as an end-user.*",
+                "operationId": "change_full_name_change_full_name_post",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "New Name"
+                        },
+                        "name": "new_name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoticeResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/delete-user": {
+            "post": {
+                "tags": [
+                    "General"
+                ],
+                "summary": "Delete the current user",
+                "description": "Delete the current user.\n\n*You don't need this call as an end-user.*",
+                "operationId": "delete_user_delete_user_post",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoticeResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/csrf": {
+            "get": {
+                "tags": [
+                    "Security"
+                ],
+                "summary": "Apply CSRF cookie and return the same security token in the response.",
+                "description": "Apply CSRF security token in the response.\n\n*You don't need this call as an end-user.*",
+                "operationId": "csrf_csrf_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/webhook": {
+            "post": {
+                "tags": [
+                    "Webhook"
+                ],
+                "summary": "[FusionAuth] Incoming webhook",
+                "description": "Incoming FusionAuth webhook handler.\n\n*You don't need this call as an end-user.*",
+                "operationId": "flow_webhook_webhook_post",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoticeResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBasic": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ApiKeyResponse": {
+                "properties": {
+                    "api_key": {
+                        "type": "string",
+                        "title": "Api Key"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "api_key"
+                ],
+                "title": "ApiKeyResponse",
+                "description": "API key response model."
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "LoginRequest": {
+                "properties": {
+                    "user_email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "User e-mail",
+                        "description": "The e-mail address of the user."
+                    },
+                    "api_key": {
+                        "type": "string",
+                        "minLength": 43,
+                        "title": "API key",
+                        "description": "API key of the user",
+                        "default": ""
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "user_email"
+                ],
+                "title": "LoginRequest",
+                "description": "Login with e-mail and API key request model."
+            },
+            "NoticeResponse": {
+                "properties": {
+                    "notice": {
+                        "type": "string",
+                        "title": "Notice"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "notice"
+                ],
+                "title": "NoticeResponse",
+                "description": "Notice response model."
+            },
+            "TokenResponse": {
+                "properties": {
+                    "access_token": {
+                        "type": "string",
+                        "title": "Access Token"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "access_token"
+                ],
+                "title": "TokenResponse",
+                "description": "Token response model."
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        },
+        "securitySchemes": {
+            "HTTPBearer": {
+                "type": "http",
+                "scheme": "bearer"
+            },
+            "HTTPBasic": {
+                "type": "http",
+                "scheme": "basic"
+            }
+        }
+    }
+}

@@ -1,0 +1,3062 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Story API",
+        "description": "\n** Error handling information**\n\n| HTTP Status Code | Description                                                                            | Expected way to handle                                                            |\n| ---------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |\n| HTTP 469         | Inappropriate text (heh)                                                               | Show detail to user and ask them to try again                                     |    \n",
+        "version": "-"
+    },
+    "servers": [
+        {
+            "url": "/api/story"
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Hello",
+                "description": "Hello world call.",
+                "operationId": "hello__get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "title": "Response Hello  Get"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/error/{error_code}": {
+            "get": {
+                "summary": "Throw Error",
+                "description": "Throw error given. Used for testing.",
+                "operationId": "throw_error_error__error_code__get",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Error Code"
+                        },
+                        "name": "error_code",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/stt": {
+            "post": {
+                "summary": "Stt Endpoint",
+                "description": "STT endpoint.",
+                "operationId": "stt_endpoint_stt_post",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_stt_endpoint_stt_post"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "title": "Response Stt Endpoint Stt Post"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/guest/stt": {
+            "post": {
+                "tags": [
+                    "Guest"
+                ],
+                "summary": "Stt Endpoint Guest",
+                "description": "STT guest endpoint.",
+                "operationId": "stt_endpoint_guest_guest_stt_post",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_stt_endpoint_guest_guest_stt_post"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "title": "Response Stt Endpoint Guest Guest Stt Post"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/response": {
+            "post": {
+                "summary": "Get Response Endpoint",
+                "description": "Prompt endpoint.\n\nCustomization logic:\n- If `prompt_template_str` is given, the entire prompt is overriden with the string given\n- If `prompt_template_name` is given, the prompt template is overriden. This occurs before append/prepend prompts.",
+                "operationId": "get_response_endpoint_response_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoryConversationRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StoryResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/guest/response": {
+            "post": {
+                "tags": [
+                    "Guest"
+                ],
+                "summary": "Get Response Endpoint Guest",
+                "description": "Prompt endpoint.",
+                "operationId": "get_response_endpoint_guest_guest_response_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoryConversationRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StoryResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/streaming-response": {
+            "post": {
+                "summary": "Get Streaming Response Endpoint",
+                "description": "Prompt endpoint.\n\nCustomization logic:\n- If `prompt_template_str` is given, the entire prompt is overriden with the string given\n- If `prompt_template_name` is given, the prompt template is overriden. This occurs before append/prepend prompts.",
+                "operationId": "get_streaming_response_endpoint_streaming_response_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoryConversationRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StoryStreamingResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/guest/streaming-response": {
+            "post": {
+                "tags": [
+                    "Guest"
+                ],
+                "summary": "Get Streaming Response Endpoint Guest",
+                "description": "Prompt endpoint.",
+                "operationId": "get_streaming_response_endpoint_guest_guest_streaming_response_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoryConversationRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StoryStreamingResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/user": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user data",
+                "description": "Get user data.\n\n`timezone` can be null.\n`created_at` is given in user's timezone if timezone is set, otherwise in UTC.",
+                "operationId": "get_user_status_user_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetUserResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/user/trial": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user free trial data",
+                "description": "Get user free trial data.\n\n`trial_end` is given in UTC, but accounts for user's timezone.\n`is_paid` is True if user has a premium account else False.",
+                "operationId": "get_user_trial_user_trial_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetUserTrialResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/user/settings": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user settings",
+                "description": "Get user settings.\n\nDaily Intention Reminder Time value will just be the time given for the user's timezone.\nTimezone information is included in user settings so it is not supplied as part of the datetime.",
+                "operationId": "get_user_settings_user_settings_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetUserSettingsResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update user settings",
+                "description": "Update user settings.\n\nAlways GET user settings after PUT so that any timezone changes are converted\nand displayed correctly.\n\nvalue_type: Options are currently only `time`\n`time` must be in the string format \"HH:MM:SS\" (military time)\n\nQuestion ids will be sorted and duplicates will be removed.\n404 Error is thrown if question ID is not valid.\n\nUsers must have at least one question ID saved.\n`enabled_log_question_ids` must either be a list with len > 0 or None.\n400 Error is thrown if an empty list is passed in.\n\nLocal notification time is the non-utc time that a user wants to be notified.\nBackend will handle timezone difference.\nTimezone should look like \"US/Eastern\" (TZ Identifier)\nReference: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones",
+                "operationId": "update_user_settings_user_settings_put",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateUserSettingsRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/user/idea/list": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user ideas listed",
+                "description": "Get user ideas listed.",
+                "operationId": "get_user_ideas_user_idea_list_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetIdeaListResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/user/notifications": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user notifications",
+                "description": "Get user notifications.",
+                "operationId": "get_user_notifications_user_notifications_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetNotificationsResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/user/daily": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user daily",
+                "description": "Get user daily activities.\n\nReturns log_id (null if not completed)\nReturns intent_idea_id (null if not started, can be completed or draft)\nReturns survey_id (null if not completed)\nReturns is_completed (true if intent_idea was completed, false if it's a draft)\nReturns streak (int) streak is not broken if today's intent hasn't been created yet",
+                "operationId": "get_user_daily_user_daily_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetUserDailyResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/user/daily/list": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user daily list",
+                "description": "Get all previous user daily activities.\n\nReturns a list of all existing daily activities. Days that were not completed will not have objects.",
+                "operationId": "get_user_daily_list_user_daily_list_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetUserDailyListResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/user/daily/accountability/message": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user daily",
+                "description": "Get user daily accountability message.\n\nReturns accountability_flag (bool)\nReturns accountability_message (str, if accountability_flag True else None)",
+                "operationId": "get_user_accountability_user_daily_accountability_message_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetUserDailyAccountabilityResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/idea": {
+            "put": {
+                "tags": [
+                    "Idea"
+                ],
+                "summary": "Update an idea",
+                "description": "Update an idea.",
+                "operationId": "update_idea_idea_put",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IdeaUpdate"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Idea"
+                ],
+                "summary": "Create new idea",
+                "description": "Create new idea.\n\n`idea_type` valid values:\n- original\n- feedback\n- daily_intent",
+                "operationId": "create_idea_idea_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateIdeaRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/guest/idea": {
+            "post": {
+                "tags": [
+                    "Guest"
+                ],
+                "summary": "Create guest response idea",
+                "description": "Create a new response idea for a guest given the share link.\n\nCreator of the parent idea will be notified via email once completed.",
+                "operationId": "create_idea_from_share_guest_guest_idea_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GuestIdeaCreateRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/guest/idea/share": {
+            "get": {
+                "tags": [
+                    "Guest"
+                ],
+                "summary": "Get idea data from share id.",
+                "description": "Get data from idea that is being shared with another user via an idea share id.\n\nThe `shared_with_email` will return null if the idea is shared via link.\n\nThis is called in the link a reviewer receives to start their reacting idea.",
+                "operationId": "get_idea_for_share_guest_guest_idea_share_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetSharedIdeaResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/user/share/recents": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get recent share targets",
+                "description": "Get recent share targets.",
+                "operationId": "get_recent_share_targets_user_share_recents_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetRecentSharesResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/idea/{idea_id}": {
+            "get": {
+                "tags": [
+                    "Idea"
+                ],
+                "summary": "Get idea data from idea id.",
+                "description": "Get idea data from idea id for user display.",
+                "operationId": "get_idea_idea__idea_id__get",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Idea Id"
+                        },
+                        "name": "idea_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IdeaItem"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/idea/{idea_id}/children": {
+            "get": {
+                "tags": [
+                    "Idea"
+                ],
+                "summary": "Get idea children of the idea id given.",
+                "description": "Get idea children of the idea id given.",
+                "operationId": "get_idea_children_idea__idea_id__children_get",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Idea Id"
+                        },
+                        "name": "idea_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetIdeaListResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/idea/{idea_id}/share/individual/list": {
+            "get": {
+                "tags": [
+                    "Idea"
+                ],
+                "summary": "Get individually shared with users.",
+                "description": "Get individual shares of the idea id given.",
+                "operationId": "get_idea_shares_individual_idea__idea_id__share_individual_list_get",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Idea Id"
+                        },
+                        "name": "idea_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetShareListResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/idea/{idea_id}/share/group/list": {
+            "get": {
+                "tags": [
+                    "Idea"
+                ],
+                "summary": "Get group shared with users.",
+                "description": "Get group shares of the idea id given.",
+                "operationId": "get_idea_shares_group_idea__idea_id__share_group_list_get",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Idea Id"
+                        },
+                        "name": "idea_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetGroupShareListResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/idea/{idea_id}/share/link": {
+            "get": {
+                "tags": [
+                    "Idea"
+                ],
+                "summary": "Get share idea link",
+                "description": "Get reuseable share link for the idea id given.\n\n404 ERROR if share link has not been created yet",
+                "operationId": "get_share_idea_link_idea__idea_id__share_link_get",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Idea Id"
+                        },
+                        "name": "idea_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetShareLinkResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Idea"
+                ],
+                "summary": "Create share idea link",
+                "description": "Create reuseable share link for the idea id given.\n\n409 ERROR if share link already exists for idea id given.",
+                "operationId": "create_share_idea_link_idea__idea_id__share_link_post",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Idea Id"
+                        },
+                        "name": "idea_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetShareLinkResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/idea/{idea_id}/share": {
+            "post": {
+                "tags": [
+                    "Idea"
+                ],
+                "summary": "Share the given idea to email",
+                "description": "Share the given idea to user(s) with provided email(s).\n\nThe recipient(s) receives an email with a unique share link.\nEither group_share_emails or share_with_email is required.\nIf group_share_emails is given then it's treated as a group share.\nOtherwise if share_with_email is given then it's singular share for feedback.\n\nIf individually sharing, the endpoint will throw a 409 error because share already exists.\nIf group sharing, the endpoint will update the existing share with the new group id.\nE.g. A shared with B individually, then makes a group with B, C, D. B just gets updated to be in the group.\n\nErrors: \\n\n400 - incorrect parameters \\n\n404 - idea not found \\n\n409 - idea is already shared \\n",
+                "operationId": "share_idea_idea__idea_id__share_post",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Idea Id"
+                        },
+                        "name": "idea_id",
+                        "in": "path"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ShareIdeaRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/idea/{idea_id}/dismiss": {
+            "post": {
+                "tags": [
+                    "Idea"
+                ],
+                "summary": "Mark idea share dismissed",
+                "description": "Mark a feedback request as dismissed by the user it's shared with.",
+                "operationId": "dismiss_idea_share_idea__idea_id__dismiss_post",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Idea Id"
+                        },
+                        "name": "idea_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/idea/{idea_id}/mark-read": {
+            "put": {
+                "tags": [
+                    "Idea"
+                ],
+                "summary": "Mark idea read by user",
+                "description": "Mark an idea as read by the user it's shared with.",
+                "operationId": "update_idea_read_idea__idea_id__mark_read_put",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Idea Id"
+                        },
+                        "name": "idea_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/form/log": {
+            "get": {
+                "tags": [
+                    "Form"
+                ],
+                "summary": "Get log questions",
+                "description": "Get user daily log questions.",
+                "operationId": "get_log_questions_form_log_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetLogResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Form"
+                ],
+                "summary": "Save user submitted log",
+                "description": "Save user daily log answers.\n\nParameter idea_id is optional.",
+                "operationId": "create_log_reponse_form_log_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateLogRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/form/log/{log_id}": {
+            "get": {
+                "tags": [
+                    "Form"
+                ],
+                "summary": "Get submitted log answers",
+                "description": "Get user submitted log answers.",
+                "operationId": "get_log_answers_form_log__log_id__get",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Log Id"
+                        },
+                        "name": "log_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetLogResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Form"
+                ],
+                "summary": "Update user submitted log",
+                "description": "Update user daily log answers.\n\nOnly include answers that changed.\nQuestions not included in request will assume no change to what's in the database.\nNew questions are ignored. It is currently not expected to add questions to a log.",
+                "operationId": "update_log_reponse_form_log__log_id__put",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Log Id"
+                        },
+                        "name": "log_id",
+                        "in": "path"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateLogRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/form/survey": {
+            "get": {
+                "tags": [
+                    "Form"
+                ],
+                "summary": "Get survey questions",
+                "description": "Get survey questions.",
+                "operationId": "get_survey_questions_form_survey_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetSurveyResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Form"
+                ],
+                "summary": "Save survey scores",
+                "description": "Save survey scores.\n\nParameter idea_id is optional.",
+                "operationId": "create_survey_response_form_survey_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateSurveyRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/create-portal-session": {
+            "post": {
+                "summary": "Customer Portal",
+                "description": "Start customer portal session so they can update their subscription.\n\n**Request body:**\n- `user_email` (`string`): new user's e-mail address",
+                "operationId": "customer_portal_create_portal_session_post",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_customer_portal_create_portal_session_post"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/create-student-checkout-session": {
+            "post": {
+                "summary": "Create Checkout Session",
+                "description": "Start student discounted checkout session with promo code filled in.",
+                "operationId": "create_checkout_session_create_student_checkout_session_post",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_create_checkout_session_create_student_checkout_session_post"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/google-cal/auth-link": {
+            "get": {
+                "tags": [
+                    "Google API"
+                ],
+                "summary": "Get Google Auth Link",
+                "description": "Get Google calendar OAuth link.\n\nSave token to DB and set up webhook channel.",
+                "operationId": "get_google_auth_link_google_cal_auth_link_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/google-cal/stop": {
+            "post": {
+                "tags": [
+                    "Google API"
+                ],
+                "summary": "Stop Google Cal Listen",
+                "description": "Stop listening to user email's Google Calendar events.",
+                "operationId": "stop_google_cal_listen_google_cal_stop_post",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "User Email"
+                        },
+                        "name": "user_email",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/one-liners": {
+            "get": {
+                "summary": "Get One Liners",
+                "description": "List latest one-liner idea descriptions.",
+                "operationId": "get_one_liners_one_liners_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array",
+                                    "title": "Response Get One Liners One Liners Get"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Body_create_checkout_session_create_student_checkout_session_post": {
+                "properties": {
+                    "user_email": {
+                        "type": "string",
+                        "title": "User Email"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "user_email"
+                ],
+                "title": "Body_create_checkout_session_create_student_checkout_session_post"
+            },
+            "Body_customer_portal_create_portal_session_post": {
+                "properties": {
+                    "user_email": {
+                        "type": "string",
+                        "title": "User Email"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "user_email"
+                ],
+                "title": "Body_customer_portal_create_portal_session_post"
+            },
+            "Body_stt_endpoint_guest_guest_stt_post": {
+                "properties": {
+                    "data": {
+                        "type": "string",
+                        "format": "binary",
+                        "title": "Data"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "data"
+                ],
+                "title": "Body_stt_endpoint_guest_guest_stt_post"
+            },
+            "Body_stt_endpoint_stt_post": {
+                "properties": {
+                    "data": {
+                        "type": "string",
+                        "format": "binary",
+                        "title": "Data"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "data"
+                ],
+                "title": "Body_stt_endpoint_stt_post"
+            },
+            "CreateIdeaRequest": {
+                "properties": {
+                    "result": {
+                        "type": "string",
+                        "title": "Result"
+                    },
+                    "structured_result": {
+                        "type": "object",
+                        "title": "Structured Result"
+                    },
+                    "transcript": {
+                        "items": {},
+                        "type": "array",
+                        "title": "Transcript"
+                    },
+                    "parent_idea_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Parent Idea Id"
+                    },
+                    "idea_metadata": {
+                        "type": "object",
+                        "title": "Idea Metadata"
+                    },
+                    "idea_type": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/IdeaType"
+                            }
+                        ],
+                        "default": "original"
+                    },
+                    "log_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Log Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "result"
+                ],
+                "title": "CreateIdeaRequest",
+                "description": "Create idea request model."
+            },
+            "CreateLogRequest": {
+                "properties": {
+                    "log": {
+                        "items": {
+                            "$ref": "#/components/schemas/LogAnswerItem"
+                        },
+                        "type": "array",
+                        "title": "Log"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "log"
+                ],
+                "title": "CreateLogRequest",
+                "description": "User submitted log answers."
+            },
+            "CreateResponse": {
+                "properties": {
+                    "id": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "uuid"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ],
+                        "title": "Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id"
+                ],
+                "title": "CreateResponse",
+                "description": "Creation response."
+            },
+            "CreateSurveyRequest": {
+                "properties": {
+                    "survey": {
+                        "items": {
+                            "$ref": "#/components/schemas/SurveyAnswerItem"
+                        },
+                        "type": "array",
+                        "title": "Survey"
+                    },
+                    "idea_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Idea Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "survey"
+                ],
+                "title": "CreateSurveyRequest",
+                "description": "User submitted survey response."
+            },
+            "DailyIntentItem": {
+                "properties": {
+                    "idea_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Idea Id"
+                    },
+                    "log_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Log Id"
+                    },
+                    "survey_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Survey Id"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Created At"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "idea_id",
+                    "created_at"
+                ],
+                "title": "DailyIntentItem",
+                "description": "Daily intent item."
+            },
+            "FeedbackItem": {
+                "properties": {
+                    "oid_heading_text": {
+                        "type": "string",
+                        "title": "Oid Heading Text"
+                    },
+                    "matched_spans": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Matched Spans"
+                    },
+                    "feedback_text": {
+                        "type": "string",
+                        "title": "Feedback Text"
+                    },
+                    "labels": {
+                        "items": {
+                            "$ref": "#/components/schemas/LabelItem"
+                        },
+                        "type": "array",
+                        "title": "Labels"
+                    },
+                    "transcript_indices": {
+                        "items": {
+                            "type": "integer"
+                        },
+                        "type": "array",
+                        "title": "Transcript Indices"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "oid_heading_text",
+                    "matched_spans",
+                    "feedback_text",
+                    "labels",
+                    "transcript_indices"
+                ],
+                "title": "FeedbackItem",
+                "description": "Feedback item response model."
+            },
+            "GetGroupShareListResponse": {
+                "properties": {
+                    "groups": {
+                        "items": {
+                            "$ref": "#/components/schemas/GroupItem"
+                        },
+                        "type": "array",
+                        "title": "Groups"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "groups"
+                ],
+                "title": "GetGroupShareListResponse",
+                "description": "Groups user has shared idea with listed."
+            },
+            "GetIdeaListResponse": {
+                "properties": {
+                    "ideas": {
+                        "items": {
+                            "$ref": "#/components/schemas/IdeaItem"
+                        },
+                        "type": "array",
+                        "title": "Ideas"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "ideas"
+                ],
+                "title": "GetIdeaListResponse",
+                "description": "User's ideas listed."
+            },
+            "GetLogResponse": {
+                "properties": {
+                    "log": {
+                        "items": {
+                            "$ref": "#/components/schemas/LogQuestionItem"
+                        },
+                        "type": "array",
+                        "title": "Log"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "log"
+                ],
+                "title": "GetLogResponse",
+                "description": "User's daily log questions."
+            },
+            "GetNotificationsResponse": {
+                "properties": {
+                    "notifications": {
+                        "items": {
+                            "$ref": "#/components/schemas/NotificationItem"
+                        },
+                        "type": "array",
+                        "title": "Notifications"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "notifications"
+                ],
+                "title": "GetNotificationsResponse",
+                "description": "Notifications response."
+            },
+            "GetRecentSharesResponse": {
+                "properties": {
+                    "recents": {
+                        "items": {
+                            "$ref": "#/components/schemas/ShareTarget"
+                        },
+                        "type": "array",
+                        "title": "Recents"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "recents"
+                ],
+                "title": "GetRecentSharesResponse",
+                "description": "Recent share targets."
+            },
+            "GetShareLinkResponse": {
+                "properties": {
+                    "link": {
+                        "type": "string",
+                        "title": "Link"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "link"
+                ],
+                "title": "GetShareLinkResponse",
+                "description": "Reuseable idea share link."
+            },
+            "GetShareListResponse": {
+                "properties": {
+                    "shares": {
+                        "items": {
+                            "$ref": "#/components/schemas/SharedUserItem"
+                        },
+                        "type": "array",
+                        "title": "Shares"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "shares"
+                ],
+                "title": "GetShareListResponse",
+                "description": "User idea's shares listed."
+            },
+            "GetSharedIdeaResponse": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Id"
+                    },
+                    "title": {
+                        "type": "string",
+                        "title": "Title"
+                    },
+                    "creator_email": {
+                        "type": "string",
+                        "title": "Creator Email"
+                    },
+                    "shared_with_email": {
+                        "type": "string",
+                        "title": "Shared With Email"
+                    },
+                    "share_message": {
+                        "type": "string",
+                        "title": "Share Message"
+                    },
+                    "creator_name": {
+                        "type": "string",
+                        "title": "Creator Name"
+                    },
+                    "result": {
+                        "type": "string",
+                        "title": "Result"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "title",
+                    "creator_email",
+                    "result"
+                ],
+                "title": "GetSharedIdeaResponse",
+                "description": "Idea being shared with another user response model."
+            },
+            "GetSurveyResponse": {
+                "properties": {
+                    "ids": {
+                        "items": {
+                            "$ref": "#/components/schemas/SurveyQuestion"
+                        },
+                        "type": "array"
+                    },
+                    "range": {
+                        "type": "integer",
+                        "title": "Range"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "ids",
+                    "range"
+                ],
+                "title": "GetSurveyResponse",
+                "description": "Survey questions."
+            },
+            "GetUserDailyAccountabilityResponse": {
+                "properties": {
+                    "accountability_flag": {
+                        "type": "boolean",
+                        "title": "Accountability Flag"
+                    },
+                    "accountability_message": {
+                        "type": "string",
+                        "title": "Accountability Message"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "accountability_flag"
+                ],
+                "title": "GetUserDailyAccountabilityResponse",
+                "description": "Daily accountability message response."
+            },
+            "GetUserDailyListResponse": {
+                "properties": {
+                    "week_start": {
+                        "type": "string",
+                        "title": "Week Start"
+                    },
+                    "daily_intent": {
+                        "items": {
+                            "$ref": "#/components/schemas/DailyIntentItem"
+                        },
+                        "type": "array",
+                        "title": "Daily Intent"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "week_start",
+                    "daily_intent"
+                ],
+                "title": "GetUserDailyListResponse",
+                "description": "Daily list response."
+            },
+            "GetUserDailyResponse": {
+                "properties": {
+                    "log_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Log Id"
+                    },
+                    "intent_idea_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Intent Idea Id"
+                    },
+                    "survey_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Survey Id"
+                    },
+                    "is_completed": {
+                        "type": "boolean",
+                        "title": "Is Completed"
+                    },
+                    "streak": {
+                        "type": "integer",
+                        "title": "Streak"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "streak"
+                ],
+                "title": "GetUserDailyResponse",
+                "description": "Daily response."
+            },
+            "GetUserResponse": {
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "title": "Email"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "mail_verified": {
+                        "type": "boolean",
+                        "title": "Mail Verified"
+                    },
+                    "timezone": {
+                        "type": "string",
+                        "title": "Timezone"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Created At"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "email",
+                    "name",
+                    "mail_verified",
+                    "created_at"
+                ],
+                "title": "GetUserResponse",
+                "description": "Get user data response."
+            },
+            "GetUserSettingsResponse": {
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/UserSettingUserItem"
+                    },
+                    "notifications": {
+                        "items": {
+                            "$ref": "#/components/schemas/UserSettingNotificationItem"
+                        },
+                        "type": "array",
+                        "title": "Notifications"
+                    },
+                    "log": {
+                        "items": {
+                            "$ref": "#/components/schemas/UserSettingLogItem"
+                        },
+                        "type": "array",
+                        "title": "Log"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "user",
+                    "notifications",
+                    "log"
+                ],
+                "title": "GetUserSettingsResponse",
+                "description": "Get user settings response."
+            },
+            "GetUserTrialResponse": {
+                "properties": {
+                    "trial_end": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Trial End"
+                    },
+                    "is_paid": {
+                        "type": "boolean",
+                        "title": "Is Paid"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "trial_end",
+                    "is_paid"
+                ],
+                "title": "GetUserTrialResponse",
+                "description": "Get user idea limit response."
+            },
+            "GroupItem": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Id"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Created At"
+                    },
+                    "users": {
+                        "items": {
+                            "$ref": "#/components/schemas/SharedUserItem"
+                        },
+                        "type": "array",
+                        "title": "Users"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "name",
+                    "created_at",
+                    "users"
+                ],
+                "title": "GroupItem",
+                "description": "Group model response."
+            },
+            "GuestIdeaCreateRequest": {
+                "properties": {
+                    "result": {
+                        "type": "string",
+                        "title": "Result"
+                    },
+                    "structured_result": {
+                        "type": "object",
+                        "title": "Structured Result"
+                    },
+                    "transcript": {
+                        "items": {},
+                        "type": "array",
+                        "title": "Transcript"
+                    },
+                    "parent_idea_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Parent Idea Id"
+                    },
+                    "idea_metadata": {
+                        "type": "object",
+                        "title": "Idea Metadata"
+                    },
+                    "idea_type": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/IdeaType"
+                            }
+                        ],
+                        "default": "original"
+                    },
+                    "creator_email": {
+                        "type": "string",
+                        "title": "Creator Email"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "result"
+                ],
+                "title": "GuestIdeaCreateRequest",
+                "description": "Guest idea create request model."
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "IdeaItem": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Id"
+                    },
+                    "title": {
+                        "type": "string",
+                        "title": "Title"
+                    },
+                    "result": {
+                        "type": "string",
+                        "title": "Result"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/IdeaType"
+                    },
+                    "result_json": {
+                        "items": {
+                            "$ref": "#/components/schemas/ResultJsonItem"
+                        },
+                        "type": "array",
+                        "title": "Result Json"
+                    },
+                    "structured_result": {
+                        "$ref": "#/components/schemas/StructuredResultItem"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Created At"
+                    },
+                    "creator_email": {
+                        "type": "string",
+                        "title": "Creator Email"
+                    },
+                    "creator_name": {
+                        "type": "string",
+                        "title": "Creator Name"
+                    },
+                    "is_unread": {
+                        "type": "boolean",
+                        "title": "Is Unread"
+                    },
+                    "shared_with_users": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Shared With Users"
+                    },
+                    "feedback": {
+                        "items": {
+                            "$ref": "#/components/schemas/IdeaItem"
+                        },
+                        "type": "array",
+                        "title": "Feedback"
+                    },
+                    "transcript": {
+                        "items": {
+                            "$ref": "#/components/schemas/TranscriptMessage"
+                        },
+                        "type": "array",
+                        "title": "Transcript"
+                    },
+                    "parent_idea": {
+                        "$ref": "#/components/schemas/IdeaItem"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "title",
+                    "result",
+                    "type",
+                    "created_at",
+                    "creator_email",
+                    "is_unread"
+                ],
+                "title": "IdeaItem",
+                "description": "User's idea when in list."
+            },
+            "IdeaType": {
+                "type": "string",
+                "enum": [
+                    "feedback",
+                    "original",
+                    "daily_intent"
+                ],
+                "title": "IdeaType",
+                "description": "Type of the idea (feedback, original)."
+            },
+            "IdeaUpdate": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "title": {
+                        "type": "string",
+                        "title": "Title"
+                    },
+                    "result": {
+                        "type": "string",
+                        "title": "Result"
+                    },
+                    "structured_result": {
+                        "type": "object",
+                        "title": "Structured Result"
+                    },
+                    "transcript": {
+                        "items": {},
+                        "type": "array",
+                        "title": "Transcript"
+                    },
+                    "idea_metadata": {
+                        "type": "object",
+                        "title": "Idea Metadata"
+                    }
+                },
+                "type": "object",
+                "title": "IdeaUpdate",
+                "description": "Update model for ideas."
+            },
+            "LabelItem": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "emoji": {
+                        "type": "string",
+                        "title": "Emoji"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name",
+                    "emoji"
+                ],
+                "title": "LabelItem",
+                "description": "Label item response model."
+            },
+            "LlmCustomization": {
+                "properties": {
+                    "prepend_prompts": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Prepend Prompts",
+                        "default": []
+                    },
+                    "append_prompts": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Append Prompts",
+                        "default": []
+                    },
+                    "prompt_template_name": {
+                        "type": "string",
+                        "title": "Prompt Template Name"
+                    },
+                    "prompt_template_string": {
+                        "type": "string",
+                        "title": "Prompt Template String"
+                    }
+                },
+                "type": "object",
+                "title": "LlmCustomization",
+                "description": "Override fields."
+            },
+            "LogAnswerItem": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    },
+                    "value": {
+                        "type": "boolean",
+                        "title": "Value"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "value"
+                ],
+                "title": "LogAnswerItem",
+                "description": "Daily log answer item."
+            },
+            "LogQuestionItem": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    },
+                    "text": {
+                        "type": "string",
+                        "title": "Text"
+                    },
+                    "label": {
+                        "type": "string",
+                        "title": "Label"
+                    },
+                    "value": {
+                        "type": "boolean",
+                        "title": "Value"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "text",
+                    "label"
+                ],
+                "title": "LogQuestionItem",
+                "description": "Daily log question item."
+            },
+            "NotificationItem": {
+                "properties": {
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Created At"
+                    },
+                    "related_idea_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Related Idea Id"
+                    },
+                    "related_idea_owner_name": {
+                        "type": "string",
+                        "title": "Related Idea Owner Name"
+                    },
+                    "related_idea_owner_email": {
+                        "type": "string",
+                        "title": "Related Idea Owner Email"
+                    },
+                    "related_idea_title": {
+                        "type": "string",
+                        "title": "Related Idea Title"
+                    },
+                    "draft_response_idea_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Draft Response Idea Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "created_at",
+                    "related_idea_id",
+                    "related_idea_owner_name",
+                    "related_idea_owner_email",
+                    "related_idea_title"
+                ],
+                "title": "NotificationItem",
+                "description": "Notification."
+            },
+            "PromptId": {
+                "type": "string",
+                "enum": [
+                    "todo",
+                    "get_accountability",
+                    "set_accountability",
+                    "format_accountability"
+                ],
+                "title": "PromptId",
+                "description": "ID for prompts."
+            },
+            "ResultJsonItem": {
+                "properties": {
+                    "heading": {
+                        "type": "string",
+                        "title": "Heading"
+                    },
+                    "body": {
+                        "type": "string",
+                        "title": "Body"
+                    }
+                },
+                "type": "object",
+                "title": "ResultJsonItem",
+                "description": "Result in JSON form."
+            },
+            "ShareIdeaRequest": {
+                "properties": {
+                    "share_with_email": {
+                        "type": "string",
+                        "title": "Share With Email"
+                    },
+                    "share_message": {
+                        "type": "string",
+                        "title": "Share Message"
+                    },
+                    "group_share_emails": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Group Share Emails"
+                    }
+                },
+                "type": "object",
+                "title": "ShareIdeaRequest",
+                "description": "Share idea request model."
+            },
+            "ShareTarget": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "email": {
+                        "type": "string",
+                        "title": "Email"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name",
+                    "email"
+                ],
+                "title": "ShareTarget",
+                "description": "Share target."
+            },
+            "SharedUserItem": {
+                "properties": {
+                    "share_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Share Id"
+                    },
+                    "email": {
+                        "type": "string",
+                        "title": "Email"
+                    },
+                    "shared_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Shared At"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "share_id",
+                    "email",
+                    "shared_at"
+                ],
+                "title": "SharedUserItem",
+                "description": "Shared with user data."
+            },
+            "StoryConversationRequest": {
+                "properties": {
+                    "messages": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Messages"
+                    },
+                    "react_to": {
+                        "type": "string",
+                        "title": "React To"
+                    },
+                    "react_to_author": {
+                        "type": "string",
+                        "title": "React To Author"
+                    },
+                    "react_to_is_current_user": {
+                        "type": "boolean",
+                        "title": "React To Is Current User",
+                        "default": false
+                    },
+                    "summarize": {
+                        "type": "boolean",
+                        "title": "Summarize",
+                        "default": false
+                    },
+                    "structured_feedback": {
+                        "type": "boolean",
+                        "title": "Structured Feedback",
+                        "default": false
+                    },
+                    "prompt_id": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/PromptId"
+                            }
+                        ],
+                        "default": false
+                    },
+                    "customization": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/LlmCustomization"
+                            }
+                        ],
+                        "title": "Customization",
+                        "default": {
+                            "prepend_prompts": [],
+                            "append_prompts": []
+                        }
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "messages"
+                ],
+                "title": "StoryConversationRequest",
+                "description": "Essay request for response to conversation."
+            },
+            "StoryResponse": {
+                "properties": {
+                    "request_message_tokens": {
+                        "type": "integer",
+                        "title": "Request Message Tokens"
+                    },
+                    "request_word_count": {
+                        "type": "integer",
+                        "title": "Request Word Count"
+                    },
+                    "response": {
+                        "type": "string",
+                        "title": "Response"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "request_message_tokens",
+                    "request_word_count",
+                    "response"
+                ],
+                "title": "StoryResponse",
+                "description": "Story response model."
+            },
+            "StoryStreamingResponse": {
+                "properties": {
+                    "request_message_tokens": {
+                        "type": "integer",
+                        "title": "Request Message Tokens"
+                    },
+                    "request_word_count": {
+                        "type": "integer",
+                        "title": "Request Word Count"
+                    },
+                    "socket_target": {
+                        "$ref": "#/components/schemas/WebsocketTarget"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "request_message_tokens",
+                    "request_word_count",
+                    "socket_target"
+                ],
+                "title": "StoryStreamingResponse",
+                "description": "Essay websocket target response model."
+            },
+            "StructuredResultItem": {
+                "properties": {
+                    "feedback_items": {
+                        "items": {
+                            "$ref": "#/components/schemas/FeedbackItem"
+                        },
+                        "type": "array",
+                        "title": "Feedback Items"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "feedback_items"
+                ],
+                "title": "StructuredResultItem",
+                "description": "Structured result item response model."
+            },
+            "SurveyAnswerItem": {
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/SurveyQuestion"
+                    },
+                    "value": {
+                        "type": "integer",
+                        "title": "Value"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "value"
+                ],
+                "title": "SurveyAnswerItem",
+                "description": "Survey answer item."
+            },
+            "SurveyQuestion": {
+                "type": "string",
+                "enum": [
+                    "focused",
+                    "creative",
+                    "articulate"
+                ],
+                "title": "SurveyQuestion",
+                "description": "Survey questions users submit scores for."
+            },
+            "TranscriptMessage": {
+                "properties": {
+                    "role": {
+                        "type": "string",
+                        "title": "Role",
+                        "default": "user"
+                    },
+                    "content": {
+                        "type": "string",
+                        "title": "Content",
+                        "default": ""
+                    }
+                },
+                "type": "object",
+                "title": "TranscriptMessage",
+                "description": "Transcript message model."
+            },
+            "UpdateUserSettingsRequest": {
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/UserSettingUserRequestItem"
+                    },
+                    "notifications": {
+                        "items": {
+                            "$ref": "#/components/schemas/UserSettingNotificationRequestItem"
+                        },
+                        "type": "array",
+                        "title": "Notifications"
+                    },
+                    "enabled_log_question_ids": {
+                        "items": {
+                            "type": "integer"
+                        },
+                        "type": "array",
+                        "title": "Enabled Log Question Ids"
+                    }
+                },
+                "type": "object",
+                "title": "UpdateUserSettingsRequest",
+                "description": "Get user settings request."
+            },
+            "UserSettingLogItem": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    },
+                    "label": {
+                        "type": "string",
+                        "title": "Label"
+                    },
+                    "text": {
+                        "type": "string",
+                        "title": "Text"
+                    },
+                    "enabled": {
+                        "type": "boolean",
+                        "title": "Enabled"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "label",
+                    "text",
+                    "enabled"
+                ],
+                "title": "UserSettingLogItem",
+                "description": "User survey settings item."
+            },
+            "UserSettingNotificationItem": {
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "title": "Title"
+                    },
+                    "description": {
+                        "type": "string",
+                        "title": "Description"
+                    },
+                    "value": {
+                        "title": "Value"
+                    },
+                    "value_type": {
+                        "type": "string",
+                        "title": "Value Type"
+                    },
+                    "enabled": {
+                        "type": "boolean",
+                        "title": "Enabled"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "title",
+                    "description",
+                    "value_type",
+                    "enabled"
+                ],
+                "title": "UserSettingNotificationItem",
+                "description": "User notification settings item."
+            },
+            "UserSettingNotificationRequestItem": {
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "title": "Title"
+                    },
+                    "description": {
+                        "type": "string",
+                        "title": "Description"
+                    },
+                    "value": {
+                        "title": "Value"
+                    },
+                    "value_type": {
+                        "type": "string",
+                        "title": "Value Type"
+                    },
+                    "enabled": {
+                        "type": "boolean",
+                        "title": "Enabled"
+                    }
+                },
+                "type": "object",
+                "title": "UserSettingNotificationRequestItem",
+                "description": "User notification settings request item."
+            },
+            "UserSettingUserItem": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "timezone": {
+                        "type": "string",
+                        "title": "Timezone"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name"
+                ],
+                "title": "UserSettingUserItem",
+                "description": "User settings item."
+            },
+            "UserSettingUserRequestItem": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "timezone": {
+                        "type": "string",
+                        "title": "Timezone"
+                    }
+                },
+                "type": "object",
+                "title": "UserSettingUserRequestItem",
+                "description": "User settings request item."
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            },
+            "WebsocketTarget": {
+                "properties": {
+                    "is_successful": {
+                        "type": "boolean",
+                        "title": "Is Successful"
+                    },
+                    "friendly_error_message": {
+                        "type": "string",
+                        "title": "Friendly Error Message"
+                    },
+                    "token_count_message": {
+                        "type": "string",
+                        "title": "Token Count Message"
+                    },
+                    "url": {
+                        "type": "string",
+                        "title": "Url"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "is_successful",
+                    "token_count_message"
+                ],
+                "title": "WebsocketTarget",
+                "description": "Websocket target response model."
+            }
+        },
+        "securitySchemes": {
+            "HTTPBearer": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}
